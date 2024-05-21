@@ -9,10 +9,6 @@ node {
 	npmVersion = "5.6.0"
 }
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '5.5'
-}
-
 //declare a build task
 task build
 

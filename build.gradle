@@ -57,6 +57,8 @@ tasks.named('npmTest') {
     dependsOn 'npmInstall'
 }
 
+/*
 tasks.named('npmBuild') {
     dependsOn 'npmInstall'
 }
+*/

@@ -1,35 +1,62 @@
 plugins {
-  //inlude the nodeJS plugin to execute nodejs and npm tasks
-  id "com.github.node-gradle.node" version "3.1.1"
+    // Include the Node.js plugin to execute Node.js and NPM tasks
+    id "com.github.node-gradle.node" version "3.5.1"
 }
 
 node {
-	download = true
-	version = "9.11.1"
-	npmVersion = "5.6.0"
+    download = true
+    version = "9.11.1"
+    npmVersion = "5.6.0"
 }
 
-//declare a build task
-task build
+// Declare a build task
+tasks.register('build')
 
-//declare a task to create a zip of the app
-task zip(type: Zip) {
-	from ('.') {
-		include "*"
-		include "bin/**"
-		include "data/**"
-		include "node_modules/**"
-		include "public/**"
-		include "routes/**"
-		include "views/**"
-	}
-	destination file("dist")
-	archiveBaseName "trainSchedule"
+// Declare a task to create a zip of the app
+tasks.register('zip', Zip) {
+    from ('.') {
+        include "*"
+        include "bin/**"
+        include "data/**"
+        include "node_modules/**"
+        include "public/**"
+        include "routes/**"
+        include "views/**"
+    }
+    destinationDirectory = file("dist")
+    archiveBaseName = "trainSchedule"
 }
 
-//declare task dependencies
-build.dependsOn zip
-zip.dependsOn npm_build
-npm_build.dependsOn npm_test
-npm_test.dependsOn npmInstall
-npm_build.dependsOn npmInstall
+// Declare NPM tasks
+tasks.register('npmInstall', NpmTask) {
+    args = ['install']
+}
+
+tasks.register('npmTest', NpmTask) {
+    args = ['test']
+}
+
+tasks.register('npmBuild', NpmTask) {
+    args = ['run', 'build']
+}
+
+// Declare task dependencies
+tasks.named('build') {
+    dependsOn 'zip'
+}
+
+tasks.named('zip') {
+    dependsOn 'npmBuild'
+}
+
+tasks.named('npmBuild') {
+    dependsOn 'npmTest'
+}
+
+tasks.named('npmTest') {
+    dependsOn 'npmInstall'
+}
+
+tasks.named('npmBuild') {
+    dependsOn 'npmInstall'
+}

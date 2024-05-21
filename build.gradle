@@ -28,9 +28,9 @@ tasks.register('zip', Zip) {
 }
 
 // Declare NPM tasks
-tasks.register('npmInstall', NpmTask) {
-    args = ['install']
-}
+//tasks.register('npmInstall', NpmTask) {
+//    args = ['install']
+//}
 
 tasks.register('npmTest', NpmTask) {
     args = ['test']
